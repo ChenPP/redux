@@ -1,6 +1,5 @@
 import React, { Component } from 'react';
 import ReactDOM from 'react-dom';
-import { Button } from 'react-native';
 import { createStore } from 'redux';
 
 import './styles.css';
@@ -14,15 +13,15 @@ const number = {
   min: Math.ceil(1),
   max: Math.floor(100)
 };
-
-const actionPushNumber = {
+//
+const actionPushNumber = () => ({
   type: 'push_a_number',
   data: Math.floor(Math.random() * (number.max - number.min)) + number.min
-};
+});
 
 const reducer = (state = [], action) => {
   if (action.type === 'new_a_array') {
-    state = [...state, action.data];
+    state = [...state, ...action.data];
   } else if (action.type === 'push_a_number') {
     state = [...state, action.data];
   }
@@ -31,23 +30,20 @@ const reducer = (state = [], action) => {
 
 const store = createStore(reducer);
 
-store.dispatch(actionNewArray);
-store.dispatch(actionPushNumber);
-console.log(store.getState());
+// store.dispatch(actionNewArray);
+// store.dispatch(actionPushNumber());
 
 class App extends Component {
+  methodAddNumber() {
+    store.dispatch(actionPushNumber());
+    console.log('a', store.getState());
+  }
   render() {
     return (
       <div className="App">
         <h1>Hello CodeSandbox</h1>
         <h2>Start editing to see some magic happen!</h2>
-        <Button
-          title="ADD"
-          onClick={() => {
-            store.dispatch(actionPushNumber);
-            console.log(store.getState());
-          }}
-        />
+        <button onClick={() => this.methodAddNumber()}>ADD</button>
       </div>
     );
   }
